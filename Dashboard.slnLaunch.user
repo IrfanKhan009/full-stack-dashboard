@@ -1,0 +1,15 @@
+[
+  {
+    "Name": "New Profile",
+    "Projects": [
+      {
+        "Path": "src\\Dashboard.Api\\Dashboard.Api.csproj",
+        "Action": "Start"
+      },
+      {
+        "Path": "src\\Dashboard.Web\\Dashboard.Web.csproj",
+        "Action": "Start"
+      }
+    ]
+  }
+]

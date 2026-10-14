@@ -1,0 +1,17 @@
+FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
+WORKDIR /src
+COPY src/Dashboard.Api/Dashboard.Api.csproj src/Dashboard.Api/
+RUN dotnet restore src/Dashboard.Api/Dashboard.Api.csproj
+COPY src/Dashboard.Api/ src/Dashboard.Api/
+RUN dotnet publish src/Dashboard.Api/Dashboard.Api.csproj -c Release -o /app --no-restore
+
+FROM mcr.microsoft.com/dotnet/aspnet:10.0 AS final
+WORKDIR /app
+COPY --from=build /app .
+RUN mkdir /data && chown app /data
+USER app
+ENV ASPNETCORE_URLS=http://+:8080 \
+    ConnectionStrings__Default="Data Source=/data/dashboard.db"
+VOLUME /data
+EXPOSE 8080
+ENTRYPOINT ["dotnet", "Dashboard.Api.dll"]
